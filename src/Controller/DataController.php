@@ -83,6 +83,29 @@ class DataController extends AbstractController
     }
 
 
+    #[Route('/data/{id}', name: 'app_data_update', methods: ['PUT'])]
+    public function updateGenre(Request $request, int $id): JsonResponse
+    {
+        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, 'json');
+
+        $movie = $this->repository->find($id);
+
+        if (!$movie) {
+            return $this->json("Dieser Film wurde nicht gefunden.");
+        }
+
+        $movie->setName($dto->name);
+
+        $this->repository->save($movie, true);
+
+        return (new JsonResponse())->setContent(
+            $this->serializer->serialize(
+                $this->mapper->mapEntityToDTO($movie),
+                'json'
+            )
+        );
+    }
+
 
     #[Delete('/data', name: 'app_data_delete')]
     public function deleteMovie(): Response

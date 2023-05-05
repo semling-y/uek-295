@@ -54,6 +54,30 @@ class GenreController extends AbstractController
         );
     }
 
+    #[Route('/genre/{id}', name: 'app_genre_update', methods: ['PUT'])]
+    public function updateGenre(Request $request, int $id): JsonResponse
+    {
+        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateGenre::class, 'json');
+
+        $genre = $this->repository->find($id);
+
+        if (!$genre) {
+            return $this->json("Diese Genre wurde nicht gefunden.");
+        }
+
+        $genre->setGenre($dto->genre);
+
+        $this->repository->save($genre, true);
+
+        return (new JsonResponse())->setContent(
+            $this->serializer->serialize(
+                $this->mapper->mapEntityToDTO($genre),
+                'json'
+            )
+        );
+    }
+
+
     #[Delete('/genre', name: 'app_genre_delete')]
     public function deleteGenre(): Response
     {
