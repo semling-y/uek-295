@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\DTO\CreateUpdateMovie;
 use App\DTO\FilterMovie;
 use App\DTO\Mapper\ShowMovieMapper;
+use App\DTO\ShowGenre;
+use App\DTO\ShowMovie;
 use App\Entity\Movie;
 use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
@@ -12,6 +14,10 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use JMS\Serializer\SerializerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\RequestBody;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,15 +28,41 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route("/api", name: "api_")]
 class DataController extends AbstractController
 {
-    public function __construct(private ShowMovieMapper $mapper, private SerializerInterface $serializer, private  MovieRepository $repository, private GenreRepository $genreRepository, private ValidatorInterface $validator){
+    public function __construct(private SerializerInterface $serializer, private  MovieRepository $repository, private GenreRepository $genreRepository, private ValidatorInterface $validator, private ShowMovieMapper $mapper,){
 
     }
+
+
+    #[\OpenApi\Attributes\Response(
+        response: 200,
+        description: "Gibt alle Filme inklusive deren Genren zurück.",
+        content:
+        new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowMovie::class
+                )
+            )
+        )
+    )]
 
     /**
      * @param Request $request
      * @return JsonResponse
      */
 
+
+    #[\OpenApi\Attributes\Post(
+        requestBody: new RequestBody(
+            content: new JsonContent(
+                ref: new Model(
+                    type: CreateUpdateMovie::class,
+                    groups: (["create"])
+                )
+            )
+        )
+    )]
     #[Post("/data", name: "app_data_create")]
     public function createMovie(Request $request){
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, "json");
@@ -61,7 +93,13 @@ class DataController extends AbstractController
         return $this->json("Film wurde erstellt.");
     }
 
-
+    #[\OpenApi\Attributes\Get(requestBody: new RequestBody(
+        content: new JsonContent(
+            ref: new Model(
+                type: FilterMovie::class
+            )
+        )
+    ))]
     #[Get('/data', name: 'app_data_get')]
     public function getmovie(Request $request): Response{
         $dtoFilter = null;

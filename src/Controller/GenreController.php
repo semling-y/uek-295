@@ -5,12 +5,16 @@ namespace App\Controller;
 use App\DTO\CreateUpdateGenre;
 use App\DTO\Mapper\BaseMapper;
 use App\DTO\Mapper\ShowGenreMapper;
+use App\DTO\ShowGenre;
 use App\Entity\Genre;
 use App\Repository\GenreRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use JMS\Serializer\SerializerInterface;
+use Nelmio\ApiDocBundle\Model\Model;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +27,10 @@ class GenreController extends AbstractController
     public function __construct(private SerializerInterface $serializer, private  GenreRepository $repository, private ShowGenreMapper $mapper){
 
     }
+
+
+
+
 
     #[Get('/genre', name: 'app_genre_get')]
     public function getGenre(): JsonResponse
