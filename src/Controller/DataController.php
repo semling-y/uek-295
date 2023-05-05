@@ -26,6 +26,11 @@ class DataController extends AbstractController
 
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+
     #[Post("/data", name: "app_data_create")]
     public function createMovie(Request $request){
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, "json");
