@@ -2,6 +2,7 @@
 
 namespace App\DTO;
 
+use App\Validator\GenreDoesExist;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUpdateMovie
@@ -13,6 +14,7 @@ class CreateUpdateMovie
     public ?string $description= null;
 
     #[Assert\NotBlank(message: "Genre darf nicht leer sein.", groups: ["create"])]
+    #[GenreDoesExist]
     public ?int $genre = null;
 
     #[Assert\NotBlank(message: "Agerest darf nicht leer sein.", groups: ["create"])]

@@ -84,7 +84,7 @@ class DataController extends AbstractController
 
 
     #[Route('/data/{id}', name: 'app_data_update', methods: ['PUT'])]
-    public function updateGenre(Request $request, int $id): JsonResponse
+    public function updateMovie(Request $request, int $id): JsonResponse
     {
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, 'json');
 
@@ -94,7 +94,15 @@ class DataController extends AbstractController
             return $this->json("Dieser Film wurde nicht gefunden.");
         }
 
+        $genre = $this->genreRepository->find($dto->genre);
+
+
+
         $movie->setName($dto->name);
+        $movie->setDescription($dto->description);
+        $movie->setGenre($genre);
+        $movie->setAgerest($dto->agerest);
+        $movie->setRating($dto->rating);
 
         $this->repository->save($movie, true);
 
@@ -105,6 +113,7 @@ class DataController extends AbstractController
             )
         );
     }
+
 
 
     #[Delete('/data', name: 'app_data_delete')]
