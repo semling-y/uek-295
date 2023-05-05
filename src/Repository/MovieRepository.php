@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTO\FilterMovie;
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,20 @@ class MovieRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function filterAll(FilterMovie $dtoFilter)
+    {
+        $qa = $this->createQueryBuilder('a');
+
+        if($dtoFilter->name) {
+            $qa = $qa->andWhere("a.name like :name")
+                ->setParameter("name", $dtoFilter->name . "%");
+        }
+
+        return $qa
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

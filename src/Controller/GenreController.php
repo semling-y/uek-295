@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\DTO\CreateUpdateGenre;
 use App\DTO\Mapper\BaseMapper;
-use App\DTO\Mapper\ShowGenre;
+use App\DTO\Mapper\ShowGenreMapper;
 use App\Entity\Genre;
 use App\Repository\GenreRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,20 +20,26 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/api", name: "api_")]
 class GenreController extends AbstractController
 {
-    public function __construct(private SerializerInterface $serializer, private  GenreRepository $repository, private ShowGenre $mapper){
+    public function __construct(private SerializerInterface $serializer, private  GenreRepository $repository, private ShowGenreMapper $mapper){
 
     }
 
     #[Get('/genre', name: 'app_genre_get')]
-    public function getMovie(): Response
+    public function getGenre(): JsonResponse
     {
-        return $this->render('genre/index.html.twig', [
-            'controller_name' => 'DataController',
-        ]);
+        $genres = $this->repository->findAll();
+
+        $data = $this->serializer->serialize(
+            $this->mapper->mapEntitiesToDTOS($genres),
+            'json'
+        );
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
+
     #[Post('/genre', name: 'app_genre_create')]
-    public function createMovie(Request $request, GenreRepository $repository): JsonResponse
+    public function createGenre(Request $request, GenreRepository $repository): JsonResponse
     {
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateGenre::class, "json");
 
@@ -48,7 +55,7 @@ class GenreController extends AbstractController
     }
 
     #[Delete('/genre', name: 'app_genre_delete')]
-    public function deleteMovie(): Response
+    public function deleteGenre(): Response
     {
         return $this->render('data/index.html.twig', [
             'controller_name' => 'DataController',

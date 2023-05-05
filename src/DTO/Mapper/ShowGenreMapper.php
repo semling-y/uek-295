@@ -2,17 +2,15 @@
 
 namespace App\DTO\Mapper;
 
-class ShowMovie
+use App\DTO\ShowGenre;
+
+class ShowGenreMapper extends BaseMapper
 {
 
     public function mapEntityToDTO(object $entity) : object
     {
-        $mapper = new ShowGenre();
-
-        $dto = new ShowMovie();
+        $dto = new ShowGenre();
         $dto->genre = $entity->getGenre();
-
-        $dto->movie = $mapper->mapEntitiesTODTOS($entity->getGenre());
 
         return $dto;
     }
