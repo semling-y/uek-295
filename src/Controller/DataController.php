@@ -6,6 +6,7 @@ use App\DTO\CreateUpdateMovie;
 use App\DTO\Mapper\BaseMapper;
 use App\DTO\Mapper\IMapper;
 use App\Entity\Movie;
+use App\FilterGenre;
 use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
@@ -30,10 +31,10 @@ class DataController extends AbstractController
         $genre = $this->genreRepository->find($dto->genre);
 
         $entity = new Movie();
-        $entity->setGenre($genre);
 
         $entity->setName($dto->name);
         $entity->setDescription($dto->description);
+        $entity->setGenre($genre);
         $entity->setAgerest($dto->agerest);
         $entity->setRating($dto->rating);
 
@@ -42,24 +43,33 @@ class DataController extends AbstractController
         return $this->json("Film wurde erstellt.");
     }
 
-    #[Get('/data', name: 'app_data_get')]
-    public function loadAll(): JsonResponse{
 
-        $movie = $this->repository->filterALl();
+    #[Get('/data', name: 'app_data_get')]
+    public function getmovie(Request $request): Response{
+        $dtoFilter = null;
+
+        try {
+            $dtoFilter = $this->serializer->deserialize(
+                $request->getContent(),
+                FilterGenre::class,
+                'json'
+            );
+        }
+        catch (\Exception $ex) {
+            $dtoFilter = new FilterGenre();
+        }
+
+
+        $dtoAllMovie = $this->repository->filterAll($dtoFilter);
 
         return (new JsonResponse())->setContent(
             $this->serializer->serialize(
-                $this->mapper->mapEntitiesToDTOS($movie), "json"
-            )
+                $this->mapper->mapEntitiesToDTOS($dtoAllMovie), 'json')
         );
     }
-    #[Get('/data', name: 'app_data_get')]
-    public function getMovie(): Response
-    {
-        return $this->render('data/index.html.twig', [
-            'controller_name' => 'DataController',
-        ]);
-    }
+
+
+
 
     #[Delete('/data', name: 'app_data_delete')]
     public function deleteMovie(): Response
