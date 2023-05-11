@@ -182,13 +182,20 @@ class DataController extends AbstractController
 
     /**
      * delete method for movie
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    #[Delete('/data', name: 'app_data_delete')]
-    public function deleteMovie(): Response
+    #[Delete('/data/{id}', name: 'app_data_delete')]
+    public function deleteMovie(int $id): JsonResponse
     {
-        return $this->render('data/index.html.twig', [
-            'controller_name' => 'DataController',
-        ]);
+        $movie = $this->repository->find($id);
+
+        if (!$movie) {
+            return $this->json("Dieser Film wurde nicht gefunden.");
+        }
+
+        $this->repository->remove($movie, true);
+
+        return $this->json("Film wurde gelöscht.");
     }
 }
