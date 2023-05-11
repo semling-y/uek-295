@@ -9,6 +9,7 @@ class ShowMovieMapper extends BaseMapper
     public function mapEntityToDTO(object $entity) : object
     {
         $dto = new ShowMovie();
+        $dto->id = $entity->getId();
         $dto->name = $entity->getName();
         $dto->description = $entity->getDescription();
         $dto->agerest = $entity->getAgerest();
