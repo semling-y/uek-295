@@ -4,6 +4,9 @@ namespace App\DTO\Mapper;
 
 use App\DTO\ShowGenre;
 
+/**
+ * Mapper for Genre
+ */
 class ShowGenreMapper extends BaseMapper
 {
     /**

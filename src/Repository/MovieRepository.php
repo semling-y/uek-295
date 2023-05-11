@@ -57,6 +57,11 @@ class MovieRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * FilterAll Method for Movie
+     * @param FilterMovie $dtoFilter
+     * @return float|int|mixed|string
+     */
     public function filterAll(FilterMovie $dtoFilter)
     {
         $this->logger->info("Filtermethode wurde für Filme aufgerufen.");

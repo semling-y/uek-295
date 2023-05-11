@@ -26,14 +26,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- *
+ *All Methods for Movie
  */
 
 #[Route("/api", name: "api_")]
 class DataController extends AbstractController
 {
     /**
-     *
+     *Contructor for Movie
      * @param SerializerInterface $serializer
      * @param MovieRepository $repository
      * @param GenreRepository $genreRepository
@@ -57,7 +57,7 @@ class DataController extends AbstractController
         )
     )]
     /**
-     * post method for movie
+     * Post Mthod for Movie
      * @param Request $request
      * @return JsonResponse
      */
@@ -113,7 +113,7 @@ class DataController extends AbstractController
         )
     )]
     /**
-     * get method for movie
+     * Get Method for Movie
      * @param Request $request
      * @return Response
      */
@@ -143,7 +143,7 @@ class DataController extends AbstractController
     }
 
     /**
-     * put method for movie
+     * Put Method for Movie
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -181,7 +181,7 @@ class DataController extends AbstractController
 
 
     /**
-     * delete method for movie
+     * Delete Method for Movie
      * @param int $id
      * @return JsonResponse
      */

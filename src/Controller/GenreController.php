@@ -22,15 +22,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ *All Methods for Genre
+ */
 #[Route("/api", name: "api_")]
 class GenreController extends AbstractController
 {
+    /**
+     * Constructor for Genre
+     * @param SerializerInterface $serializer
+     * @param GenreRepository $repository
+     * @param ShowGenreMapper $mapper
+     */
     public function __construct(private SerializerInterface $serializer, private  GenreRepository $repository, private ShowGenreMapper $mapper){
 
     }
 
 
-
+    /**
+     * @return JsonResponse
+     */
     #[\OpenApi\Attributes\Response(
         response: 200,
         description: "Gibt alle Filme inklusive deren Genren zurück.",
@@ -45,7 +56,7 @@ class GenreController extends AbstractController
         )
     )]
     /**
-     * get method for genre
+     * Get Method for Genre
      * @return JsonResponse
      */
     #[Get('/genre', name: 'app_genre_get')]
@@ -73,7 +84,7 @@ class GenreController extends AbstractController
         )
     )]
     /**
-     * post method for genre
+     * Post Method for Genre
      * @param Request $request
      * @param GenreRepository $repository
      * @return JsonResponse
@@ -95,7 +106,7 @@ class GenreController extends AbstractController
     }
 
     /**
-     * put method for genre
+     * Put Method for Genre
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -124,7 +135,7 @@ class GenreController extends AbstractController
     }
 
     /**
-     * Delete method for genre
+     * Delete Method for Genre
      * @param int $id
      * @return JsonResponse
      */
