@@ -6,6 +6,7 @@ use App\DTO\FilterMovie;
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @extends ServiceEntityRepository<Movie>
@@ -21,7 +22,7 @@ class MovieRepository extends ServiceEntityRepository
      * constructor
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private LoggerInterface $logger)
     {
         parent::__construct($registry, Movie::class);
     }
@@ -58,11 +59,17 @@ class MovieRepository extends ServiceEntityRepository
 
     public function filterAll(FilterMovie $dtoFilter)
     {
+        $this->logger->info("Filtermethode wurde für Filme aufgerufen.");
         $qa = $this->createQueryBuilder('a');
 
         if($dtoFilter->name) {
+            $this->logger->debug("Filter Name: {name}", ["name" => $dtoFilter->name]);
             $qa = $qa->andWhere("a.name like :name")
                 ->setParameter("name", $dtoFilter->name . "%");
+        }
+
+        if($dtoFilter->orderby){
+            $qa->orderBy($dtoFilter->orderby, $dtoFilter->orderdirection ?? "ASC");
         }
 
         return $qa

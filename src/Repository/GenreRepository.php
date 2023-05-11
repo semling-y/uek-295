@@ -41,9 +41,11 @@ class GenreRepository extends ServiceEntityRepository
     }
 
     public function filterAll(FilterGenre $dtoFilter){
+        $this->logger->info("Filtermethode wurde für Genre aufgerufen.");
         $qb = $this->createQueryBuilder("b");
 
         if ($dtoFilter->genre) {
+            $this->logger->debug("Filter Name: {name}", ["name" => $dtoFilter->name]);
             $qb = $qb->andWhere("b.genre like :genre")
                 ->setParameter("genre", $dtoFilter->genre . "%");
         }

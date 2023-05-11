@@ -124,14 +124,22 @@ class GenreController extends AbstractController
     }
 
     /**
-     * delete method for genre
-     * @return Response
+     * Delete method for genre
+     * @param int $id
+     * @return JsonResponse
      */
-    #[Delete('/genre', name: 'app_genre_delete')]
-    public function deleteGenre(): Response
+    #[Delete('/genre/{id}', name: 'app_genre_delete')]
+    public function deleteGenre(int $id): JsonResponse
     {
-        return $this->render('data/index.html.twig', [
-            'controller_name' => 'DataController',
-        ]);
+        $genre = $this->repository->find($id);
+
+        if (!$genre) {
+            return $this->json("Diese Genre wurde nicht gefunden.");
+        }
+
+        $this->repository->remove($genre, true);
+
+        return $this->json("Genre wurde gelöscht.");
     }
+
 }

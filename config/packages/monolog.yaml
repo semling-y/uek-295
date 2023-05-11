@@ -1,0 +1,15 @@
+monolog:
+    handlers:
+        minimum_loglevel:
+            type: fingers-crossed
+            action_level: info
+            handler: file_log
+        file_log:
+            type: rotating_file
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: info
+            max_files: 10
+            channels: ['app']
+        syslog_handler:
+            type: syslog
+            level: error
