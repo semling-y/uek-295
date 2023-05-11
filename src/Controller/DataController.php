@@ -25,18 +25,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ *
+ */
+
 #[Route("/api", name: "api_")]
 class DataController extends AbstractController
 {
+    /**
+     *
+     * @param SerializerInterface $serializer
+     * @param MovieRepository $repository
+     * @param GenreRepository $genreRepository
+     * @param ValidatorInterface $validator
+     * @param ShowMovieMapper $mapper
+     */
     public function __construct(private SerializerInterface $serializer, private  MovieRepository $repository, private GenreRepository $genreRepository, private ValidatorInterface $validator, private ShowMovieMapper $mapper,){
 
     }
 
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
+
     #[\OpenApi\Attributes\Post(
         requestBody: new RequestBody(
             content: new JsonContent(
@@ -48,7 +57,9 @@ class DataController extends AbstractController
         )
     )]
     /**
-     *
+     * post method for movie
+     * @param Request $request
+     * @return JsonResponse
      */
     #[Post("/data", name: "app_data_create")]
     public function createMovie(Request $request){
@@ -80,10 +91,7 @@ class DataController extends AbstractController
         return $this->json("Film wurde erstellt.");
     }
 
-    /**
-     * @param Request $request
-     * @return Response
-     */
+
     #[\OpenApi\Attributes\Get(requestBody: new RequestBody(
         content: new JsonContent(
             ref: new Model(
@@ -105,7 +113,9 @@ class DataController extends AbstractController
         )
     )]
     /**
-     *
+     * get method for movie
+     * @param Request $request
+     * @return Response
      */
     #[Get('/data', name: 'app_data_get')]
     public function getmovie(Request $request): Response{
@@ -133,6 +143,7 @@ class DataController extends AbstractController
     }
 
     /**
+     * put method for movie
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -170,6 +181,7 @@ class DataController extends AbstractController
 
 
     /**
+     * delete method for movie
      * @return Response
      */
     #[Delete('/data', name: 'app_data_delete')]

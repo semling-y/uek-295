@@ -16,11 +16,21 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GenreRepository extends ServiceEntityRepository
 {
+    /**
+     * constructor
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Genre::class);
     }
 
+    /**
+     * saves
+     * @param Genre $entity
+     * @param bool $flush
+     * @return void
+     */
     public function save(Genre $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

@@ -6,7 +6,6 @@ use App\DTO\ShowMovie;
 
 class ShowMovieMapper extends BaseMapper
 {
-
     public function mapEntityToDTO(object $entity) : object
     {
         $dto = new ShowMovie();

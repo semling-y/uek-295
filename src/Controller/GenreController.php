@@ -30,9 +30,7 @@ class GenreController extends AbstractController
     }
 
 
-    /**
-     * @return JsonResponse
-     */
+
     #[\OpenApi\Attributes\Response(
         response: 200,
         description: "Gibt alle Filme inklusive deren Genren zurück.",
@@ -46,6 +44,10 @@ class GenreController extends AbstractController
             )
         )
     )]
+    /**
+     * get method for genre
+     * @return JsonResponse
+     */
     #[Get('/genre', name: 'app_genre_get')]
     public function getGenre(): JsonResponse
     {
@@ -59,11 +61,6 @@ class GenreController extends AbstractController
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
-    /**
-     * @param Request $request
-     * @param GenreRepository $repository
-     * @return JsonResponse
-     */
 
     #[\OpenApi\Attributes\Post(
         requestBody: new RequestBody(
@@ -75,6 +72,12 @@ class GenreController extends AbstractController
             )
         )
     )]
+    /**
+     * post method for genre
+     * @param Request $request
+     * @param GenreRepository $repository
+     * @return JsonResponse
+     */
     #[Post('/genre', name: 'app_genre_create')]
     public function createGenre(Request $request, GenreRepository $repository): JsonResponse
     {
@@ -92,6 +95,7 @@ class GenreController extends AbstractController
     }
 
     /**
+     * put method for genre
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -120,6 +124,7 @@ class GenreController extends AbstractController
     }
 
     /**
+     * delete method for genre
      * @return Response
      */
     #[Delete('/genre', name: 'app_genre_delete')]

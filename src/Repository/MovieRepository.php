@@ -17,11 +17,21 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MovieRepository extends ServiceEntityRepository
 {
+    /**
+     * constructor
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Movie::class);
     }
 
+    /**
+     * saves
+     * @param Movie $entity
+     * @param bool $flush
+     * @return void
+     */
     public function save(Movie $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -31,6 +41,12 @@ class MovieRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * removes
+     * @param Movie $entity
+     * @param bool $flush
+     * @return void
+     */
     public function remove(Movie $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
