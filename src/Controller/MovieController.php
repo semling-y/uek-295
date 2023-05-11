@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 
 #[Route("/api", name: "api_")]
-class DataController extends AbstractController
+class MovieController extends AbstractController
 {
     /**
      *Contructor for Movie
@@ -57,7 +57,7 @@ class DataController extends AbstractController
         )
     )]
     /**
-     * Post Mthod for Movie
+     * Post Method for Movie
      * @param Request $request
      * @return JsonResponse
      */
