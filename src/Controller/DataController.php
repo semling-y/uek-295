@@ -61,7 +61,7 @@ class DataController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    #[Post("/data", name: "app_data_create")]
+    #[Post("/movie", name: "app_data_create")]
     public function createMovie(Request $request){
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, "json");
         $genre = $this->genreRepository->find($dto->genre);
@@ -117,7 +117,7 @@ class DataController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Get('/data', name: 'app_data_get')]
+    #[Get('/movie', name: 'app_data_get')]
     public function getmovie(Request $request): Response{
         $dtoFilter = null;
 
@@ -148,7 +148,7 @@ class DataController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    #[Route('/data/{id}', name: 'app_data_update', methods: ['PUT'])]
+    #[Route('/movie/{id}', name: 'app_data_update', methods: ['PUT'])]
     public function updateMovie(Request $request, int $id): JsonResponse
     {
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, 'json');
@@ -185,7 +185,7 @@ class DataController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    #[Delete('/data/{id}', name: 'app_data_delete')]
+    #[Delete('/movie/{id}', name: 'app_data_delete')]
     public function deleteMovie(int $id): JsonResponse
     {
         $movie = $this->repository->find($id);
