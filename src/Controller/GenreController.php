@@ -12,9 +12,10 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use JMS\Serializer\SerializerInterface;
-use Nelmio\ApiDocBundle\Model\Model;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes\Items;
 use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\RequestBody;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,22 @@ class GenreController extends AbstractController
     }
 
 
-
-
-
+    /**
+     * @return JsonResponse
+     */
+    #[\OpenApi\Attributes\Response(
+        response: 200,
+        description: "Gibt alle Filme inklusive deren Genren zurück.",
+        content:
+        new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new \Nelmio\ApiDocBundle\Annotation\Model(
+                    type: ShowGenre::class
+                )
+            )
+        )
+    )]
     #[Get('/genre', name: 'app_genre_get')]
     public function getGenre(): JsonResponse
     {
@@ -45,7 +59,22 @@ class GenreController extends AbstractController
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
+    /**
+     * @param Request $request
+     * @param GenreRepository $repository
+     * @return JsonResponse
+     */
 
+    #[\OpenApi\Attributes\Post(
+        requestBody: new RequestBody(
+            content: new JsonContent(
+                ref: new Model(
+                    type: CreateUpdateGenre::class,
+                    groups: (["create"])
+                )
+            )
+        )
+    )]
     #[Post('/genre', name: 'app_genre_create')]
     public function createGenre(Request $request, GenreRepository $repository): JsonResponse
     {
@@ -62,6 +91,11 @@ class GenreController extends AbstractController
         );
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     #[Route('/genre/{id}', name: 'app_genre_update', methods: ['PUT'])]
     public function updateGenre(Request $request, int $id): JsonResponse
     {
@@ -85,7 +119,9 @@ class GenreController extends AbstractController
         );
     }
 
-
+    /**
+     * @return Response
+     */
     #[Delete('/genre', name: 'app_genre_delete')]
     public function deleteGenre(): Response
     {

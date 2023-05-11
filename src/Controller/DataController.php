@@ -33,26 +33,10 @@ class DataController extends AbstractController
     }
 
 
-    #[\OpenApi\Attributes\Response(
-        response: 200,
-        description: "Gibt alle Filme inklusive deren Genren zurück.",
-        content:
-        new JsonContent(
-            type: 'array',
-            items: new Items(
-                ref: new Model(
-                    type: ShowMovie::class
-                )
-            )
-        )
-    )]
-
     /**
      * @param Request $request
      * @return JsonResponse
      */
-
-
     #[\OpenApi\Attributes\Post(
         requestBody: new RequestBody(
             content: new JsonContent(
@@ -63,6 +47,9 @@ class DataController extends AbstractController
             )
         )
     )]
+    /**
+     *
+     */
     #[Post("/data", name: "app_data_create")]
     public function createMovie(Request $request){
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, "json");
@@ -93,6 +80,10 @@ class DataController extends AbstractController
         return $this->json("Film wurde erstellt.");
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     #[\OpenApi\Attributes\Get(requestBody: new RequestBody(
         content: new JsonContent(
             ref: new Model(
@@ -100,6 +91,22 @@ class DataController extends AbstractController
             )
         )
     ))]
+    #[\OpenApi\Attributes\Response(
+        response: 200,
+        description: "Gibt alle Filme inklusive deren Genren zurück.",
+        content:
+        new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowMovie::class
+                )
+            )
+        )
+    )]
+    /**
+     *
+     */
     #[Get('/data', name: 'app_data_get')]
     public function getmovie(Request $request): Response{
         $dtoFilter = null;
@@ -125,7 +132,11 @@ class DataController extends AbstractController
         );
     }
 
-
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     #[Route('/data/{id}', name: 'app_data_update', methods: ['PUT'])]
     public function updateMovie(Request $request, int $id): JsonResponse
     {
@@ -158,7 +169,9 @@ class DataController extends AbstractController
     }
 
 
-
+    /**
+     * @return Response
+     */
     #[Delete('/data', name: 'app_data_delete')]
     public function deleteMovie(): Response
     {
