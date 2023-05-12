@@ -25,11 +25,6 @@ class TestDataFixture extends Fixture
 
         $manager->persist($movie);
 
-
-
-        // $product = new Product();
-        // $manager->persist($product);
-
         $manager->flush();
     }
 }
