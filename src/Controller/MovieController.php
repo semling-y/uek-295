@@ -88,7 +88,7 @@ class MovieController extends AbstractController
 
         $this->repository->save($entity, true);
 
-        return $this->json("Film wurde erstellt.");
+        return $this->json($entity->getName() ." wurde auf ID: ". $entity->getId() ." erstellt." );
     }
 
 
