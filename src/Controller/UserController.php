@@ -27,7 +27,7 @@ class UserController extends AbstractController
 
         $user = new User();
         $user->setUserName($dto->username);
-        $hashedPassword = $passwordHasher->hashPassword($user, $dto->passwort);
+        $hashedPassword = $passwordHasher->hashPassword($user, $dto->password);
         $user->setPassword($hashedPassword);
         if ($dto->is_admin){
             $user->setRoles(["ROLES_ADMIN", "ROLES_USER"]);
@@ -35,7 +35,7 @@ class UserController extends AbstractController
 
         $this->repository->save($user, true);
 
-        return $this->json('User erstellt');
+        return $this->json('User erstellt.');
 
     }
 
