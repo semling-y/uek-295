@@ -11,3 +11,5 @@ app.swagger:
         path: /api/docs.json
         methods: GET
         defaults: { _conrtoller: nelmio_api_doc.cibtroller.swagger}
+api_login_check:
+    path: /api/login_check
