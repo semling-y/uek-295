@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Genre;
 use App\Entity\Movie;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -22,6 +23,9 @@ class TestDataFixture extends Fixture
         $movie->setAgerest(9);
         $movie->setRating(5);
         $movie->setGenre($genre);
+
+        $user = new User();
+
 
         $manager->persist($movie);
 
