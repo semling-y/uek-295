@@ -19,7 +19,6 @@ class Movie
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $description = null;
 
-
     #[ORM\Column]
     private ?int $agerest = null;
 
@@ -58,7 +57,6 @@ class Movie
 
         return $this;
     }
-
 
     public function getAgerest(): ?int
     {

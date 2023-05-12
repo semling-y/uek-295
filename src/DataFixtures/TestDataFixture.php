@@ -11,14 +11,14 @@ class TestDataFixture extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $genre = new  Genre();
-        $genre->setGenre("Coole Genre");
+        $genre = new Genre();
+        $genre->setGenre('Coole Genre');
 
         $manager->persist($genre);
 
         $movie = new Movie();
-        $movie->setName("Cooler Titel");
-        $movie->setDescription("Coole Beschreibung.");
+        $movie->setName('Cooler Titel');
+        $movie->setDescription('Coole Beschreibung.');
         $movie->setAgerest(9);
         $movie->setRating(5);
         $movie->setGenre($genre);

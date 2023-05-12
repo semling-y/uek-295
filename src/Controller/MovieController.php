@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\DTO\CreateUpdateMovie;
 use App\DTO\FilterMovie;
 use App\DTO\Mapper\ShowMovieMapper;
-use App\DTO\ShowGenre;
 use App\DTO\ShowMovie;
 use App\Entity\Movie;
 use App\Repository\GenreRepository;
@@ -26,57 +25,49 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- *All Methods for Movie
+ *All Methods for Movie.
  */
-
-#[Route("/api", name: "api_")]
+#[Route('/api', name: 'api_')]
 class MovieController extends AbstractController
 {
     /**
-     *Contructor for Movie
-     * @param SerializerInterface $serializer
-     * @param MovieRepository $repository
-     * @param GenreRepository $genreRepository
-     * @param ValidatorInterface $validator
-     * @param ShowMovieMapper $mapper
+     *Contructor for Movie.
      */
-    public function __construct(private SerializerInterface $serializer, private  MovieRepository $repository, private GenreRepository $genreRepository, private ValidatorInterface $validator, private ShowMovieMapper $mapper,){
-
+    public function __construct(private SerializerInterface $serializer, private MovieRepository $repository, private GenreRepository $genreRepository, private ValidatorInterface $validator, private ShowMovieMapper $mapper)
+    {
     }
-
-
 
     #[\OpenApi\Attributes\Post(
         requestBody: new RequestBody(
             content: new JsonContent(
                 ref: new Model(
                     type: CreateUpdateMovie::class,
-                    groups: (["create"])
+                    groups: (['create'])
                 )
             )
         )
     )]
     /**
-     * Post Method for Movie
-     * @param Request $request
+     * Post Method for Movie.
+     *
      * @return JsonResponse
      */
-    #[Post("/movie", name: "app_data_create")]
-    public function createMovie(Request $request){
-        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, "json");
+    #[Post('/movie', name: 'app_data_create')]
+    public function createMovie(Request $request)
+    {
+        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateMovie::class, 'json');
         $genre = $this->genreRepository->find($dto->genre);
 
+        $errors = $this->validator->validate($dto, groups: ['create']);
 
-        $errors = $this->validator->validate($dto, groups: ["create"]);
-
-        if($errors->count() > 0){
+        if ($errors->count() > 0) {
             $errorsStringArray = [];
-            foreach ($errors as $error){
+            foreach ($errors as $error) {
                 $errorsStringArray = $error->getMessage();
             }
+
             return $this->json($errorsStringArray, status: 400);
         }
-
 
         $entity = new Movie();
 
@@ -88,9 +79,8 @@ class MovieController extends AbstractController
 
         $this->repository->save($entity, true);
 
-        return $this->json($entity->getName() ." wurde auf ID: ". $entity->getId() ." erstellt." );
+        return $this->json($entity->getName().' wurde auf ID: '.$entity->getId().' erstellt.');
     }
-
 
     #[\OpenApi\Attributes\Get(requestBody: new RequestBody(
         content: new JsonContent(
@@ -101,9 +91,8 @@ class MovieController extends AbstractController
     ))]
     #[\OpenApi\Attributes\Response(
         response: 200,
-        description: "Gibt alle Filme inklusive deren Genren zurück.",
-        content:
-        new JsonContent(
+        description: 'Gibt alle Filme inklusive deren Genren zurück.',
+        content: new JsonContent(
             type: 'array',
             items: new Items(
                 ref: new Model(
@@ -113,12 +102,11 @@ class MovieController extends AbstractController
         )
     )]
     /**
-     * Get Method for Movie
-     * @param Request $request
-     * @return Response
+     * Get Method for Movie.
      */
     #[Get('/movie', name: 'app_data_get')]
-    public function getmovie(Request $request): Response{
+    public function getmovie(Request $request): Response
+    {
         $dtoFilter = null;
 
         try {
@@ -127,11 +115,9 @@ class MovieController extends AbstractController
                 FilterMovie::class,
                 'json'
             );
-        }
-        catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             $dtoFilter = new FilterMovie();
         }
-
 
         $dtoAllMovie = $this->repository->filterAll($dtoFilter);
 
@@ -143,10 +129,7 @@ class MovieController extends AbstractController
     }
 
     /**
-     * Put Method for Movie
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
+     * Put Method for Movie.
      */
     #[Route('/movie/{id}', name: 'app_data_update', methods: ['PUT'])]
     public function updateMovie(Request $request, int $id): JsonResponse
@@ -156,12 +139,10 @@ class MovieController extends AbstractController
         $movie = $this->repository->find($id);
 
         if (!$movie) {
-            return $this->json("Dieser Film wurde nicht gefunden.");
+            return $this->json('Dieser Film wurde nicht gefunden.');
         }
 
         $genre = $this->genreRepository->find($dto->genre);
-
-
 
         $movie->setName($dto->name);
         $movie->setDescription($dto->description);
@@ -179,11 +160,8 @@ class MovieController extends AbstractController
         );
     }
 
-
     /**
-     * Delete Method for Movie
-     * @param int $id
-     * @return JsonResponse
+     * Delete Method for Movie.
      */
     #[Delete('/movie/{id}', name: 'app_data_delete')]
     public function deleteMovie(int $id): JsonResponse
@@ -191,11 +169,11 @@ class MovieController extends AbstractController
         $movie = $this->repository->find($id);
 
         if (!$movie) {
-            return $this->json("Dieser Film wurde nicht gefunden.");
+            return $this->json('Dieser Film wurde nicht gefunden.');
         }
 
         $this->repository->remove($movie, true);
 
-        return $this->json("Film wurde gelöscht.");
+        return $this->json('Film wurde gelöscht.');
     }
 }

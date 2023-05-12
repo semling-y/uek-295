@@ -2,7 +2,6 @@
 
 namespace App\DTO;
 
-
 class ShowMovie
 {
     public ?int $id = null;

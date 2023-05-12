@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\DTO\CreateUpdateGenre;
-use App\DTO\Mapper\BaseMapper;
 use App\DTO\Mapper\ShowGenreMapper;
 use App\DTO\ShowGenre;
 use App\Entity\Genre;
@@ -23,30 +22,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- *All Methods for Genre
+ *All Methods for Genre.
  */
-#[Route("/api", name: "api_")]
+#[Route('/api', name: 'api_')]
 class GenreController extends AbstractController
 {
     /**
-     * Constructor for Genre
-     * @param SerializerInterface $serializer
-     * @param GenreRepository $repository
-     * @param ShowGenreMapper $mapper
+     * Constructor for Genre.
      */
-    public function __construct(private SerializerInterface $serializer, private  GenreRepository $repository, private ShowGenreMapper $mapper){
-
+    public function __construct(private SerializerInterface $serializer, private GenreRepository $repository, private ShowGenreMapper $mapper)
+    {
     }
 
-
-    /**
-     * @return JsonResponse
-     */
     #[\OpenApi\Attributes\Response(
         response: 200,
-        description: "Gibt alle Filme inklusive deren Genren zurück.",
-        content:
-        new JsonContent(
+        description: 'Gibt alle Filme inklusive deren Genren zurück.',
+        content: new JsonContent(
             type: 'array',
             items: new Items(
                 ref: new \Nelmio\ApiDocBundle\Annotation\Model(
@@ -56,8 +47,7 @@ class GenreController extends AbstractController
         )
     )]
     /**
-     * Get Method for Genre
-     * @return JsonResponse
+     * Get Method for Genre.
      */
     #[Get('/genre', name: 'app_genre_get')]
     public function getGenre(): JsonResponse
@@ -72,27 +62,23 @@ class GenreController extends AbstractController
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
-
     #[\OpenApi\Attributes\Post(
         requestBody: new RequestBody(
             content: new JsonContent(
                 ref: new Model(
                     type: CreateUpdateGenre::class,
-                    groups: (["create"])
+                    groups: (['create'])
                 )
             )
         )
     )]
     /**
-     * Post Method for Genre
-     * @param Request $request
-     * @param GenreRepository $repository
-     * @return JsonResponse
+     * Post Method for Genre.
      */
     #[Post('/genre', name: 'app_genre_create')]
     public function createGenre(Request $request, GenreRepository $repository): JsonResponse
     {
-        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateGenre::class, "json");
+        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateGenre::class, 'json');
 
         $entity = new Genre();
         $entity->setGenre($dto->genre);
@@ -101,15 +87,12 @@ class GenreController extends AbstractController
 
         return (new JsonResponse())->setContent(
             $this->serializer->serialize(
-                $this->mapper->mapEntityToDTO($entity), "json")
+                $this->mapper->mapEntityToDTO($entity), 'json')
         );
     }
 
     /**
-     * Put Method for Genre
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
+     * Put Method for Genre.
      */
     #[Route('/genre/{id}', name: 'app_genre_update', methods: ['PUT'])]
     public function updateGenre(Request $request, int $id): JsonResponse
@@ -119,7 +102,7 @@ class GenreController extends AbstractController
         $genre = $this->repository->find($id);
 
         if (!$genre) {
-            return $this->json("Diese Genre wurde nicht gefunden.");
+            return $this->json('Diese Genre wurde nicht gefunden.');
         }
 
         $genre->setGenre($dto->genre);
@@ -135,9 +118,7 @@ class GenreController extends AbstractController
     }
 
     /**
-     * Delete Method for Genre
-     * @param int $id
-     * @return JsonResponse
+     * Delete Method for Genre.
      */
     #[Delete('/genre/{id}', name: 'app_genre_delete')]
     public function deleteGenre(int $id): JsonResponse
@@ -145,12 +126,11 @@ class GenreController extends AbstractController
         $genre = $this->repository->find($id);
 
         if (!$genre) {
-            return $this->json("Diese Genre wurde nicht gefunden.");
+            return $this->json('Diese Genre wurde nicht gefunden.');
         }
 
         $this->repository->remove($genre, true);
 
-        return $this->json("Genre wurde gelöscht.");
+        return $this->json('Genre wurde gelöscht.');
     }
-
 }

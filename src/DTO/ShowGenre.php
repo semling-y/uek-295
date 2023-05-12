@@ -9,12 +9,12 @@ use OpenApi\Attributes\Property;
 
 class ShowGenre
 {
-    #[SerializedName("Filmkategorie")]
+    #[SerializedName('Filmkategorie')]
     public ?string $genre = null;
 
     #[Property(
-        "movie",
-        type: "array",
+        'movie',
+        type: 'array',
         items: new Items(
             ref: new Model(
                 type: ShowMovie::class
@@ -22,5 +22,4 @@ class ShowGenre
         )
     )]
     public $movie = [];
-
 }

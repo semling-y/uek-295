@@ -4,11 +4,10 @@ namespace App\DTO\Mapper;
 
 abstract class BaseMapper implements IMapper
 {
-
-
-    public function mapEntitiesToDTOS(iterable $entities) : iterable {
+    public function mapEntitiesToDTOS(iterable $entities): iterable
+    {
         $dtos = [];
-        foreach($entities as $entity) {
+        foreach ($entities as $entity) {
             $dtos[] = $this->mapEntityToDTO($entity);
         }
 

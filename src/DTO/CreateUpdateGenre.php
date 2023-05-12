@@ -6,6 +6,6 @@ use JMS\Serializer\Annotation\Groups;
 
 class CreateUpdateGenre
 {
-    #[Groups(["create", "update"])]
+    #[Groups(['create', 'update'])]
     public ?string $genre = null;
 }

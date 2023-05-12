@@ -19,8 +19,7 @@ use Psr\Log\LoggerInterface;
 class MovieRepository extends ServiceEntityRepository
 {
     /**
-     * constructor
-     * @param ManagerRegistry $registry
+     * constructor.
      */
     public function __construct(ManagerRegistry $registry, private LoggerInterface $logger)
     {
@@ -28,10 +27,7 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
-     * saves
-     * @param Movie $entity
-     * @param bool $flush
-     * @return void
+     * saves.
      */
     public function save(Movie $entity, bool $flush = false): void
     {
@@ -43,10 +39,7 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
-     * removes
-     * @param Movie $entity
-     * @param bool $flush
-     * @return void
+     * removes.
      */
     public function remove(Movie $entity, bool $flush = false): void
     {
@@ -58,23 +51,23 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
-     * FilterAll Method for Movie
-     * @param FilterMovie $dtoFilter
+     * FilterAll Method for Movie.
+     *
      * @return float|int|mixed|string
      */
     public function filterAll(FilterMovie $dtoFilter)
     {
-        $this->logger->info("Filtermethode wurde für Filme aufgerufen.");
+        $this->logger->info('Filtermethode wurde für Filme aufgerufen.');
         $qa = $this->createQueryBuilder('a');
 
-        if($dtoFilter->name) {
-            $this->logger->debug("Filter Name: {name}", ["name" => $dtoFilter->name]);
-            $qa = $qa->andWhere("a.name like :name")
-                ->setParameter("name", $dtoFilter->name . "%");
+        if ($dtoFilter->name) {
+            $this->logger->debug('Filter Name: {name}', ['name' => $dtoFilter->name]);
+            $qa = $qa->andWhere('a.name like :name')
+                ->setParameter('name', $dtoFilter->name.'%');
         }
 
-        if($dtoFilter->orderby){
-            $qa->orderBy($dtoFilter->orderby, $dtoFilter->orderdirection ?? "ASC");
+        if ($dtoFilter->orderby) {
+            $qa->orderBy($dtoFilter->orderby, $dtoFilter->orderdirection ?? 'ASC');
         }
 
         return $qa

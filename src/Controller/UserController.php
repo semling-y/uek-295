@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/api", name: "api_")]
+#[Route('/api', name: 'api_')]
 class UserController extends AbstractController
 {
-    public function __construct(private SerializerInterface $serializer, private UserRepository $repository){
-
+    public function __construct(private SerializerInterface $serializer, private UserRepository $repository)
+    {
     }
 
     #[Post('/user/register', name: 'user_register')]
@@ -29,14 +29,12 @@ class UserController extends AbstractController
         $user->setUserName($dto->username);
         $hashedPassword = $passwordHasher->hashPassword($user, $dto->password);
         $user->setPassword($hashedPassword);
-        if ($dto->is_admin){
-            $user->setRoles(["ROLES_ADMIN", "ROLES_USER"]);
+        if ($dto->is_admin) {
+            $user->setRoles(['ROLES_ADMIN', 'ROLES_USER']);
         }
 
         $this->repository->save($user, true);
 
         return $this->json('User erstellt.');
-
     }
-
 }

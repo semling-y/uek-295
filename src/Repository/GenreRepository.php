@@ -17,8 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class GenreRepository extends ServiceEntityRepository
 {
     /**
-     * constructor
-     * @param ManagerRegistry $registry
+     * constructor.
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -26,10 +25,7 @@ class GenreRepository extends ServiceEntityRepository
     }
 
     /**
-     * saves
-     * @param Genre $entity
-     * @param bool $flush
-     * @return void
+     * saves.
      */
     public function save(Genre $entity, bool $flush = false): void
     {
@@ -40,14 +36,15 @@ class GenreRepository extends ServiceEntityRepository
         }
     }
 
-    public function filterAll(FilterGenre $dtoFilter){
-        $this->logger->info("Filtermethode wurde für Genre aufgerufen.");
-        $qb = $this->createQueryBuilder("b");
+    public function filterAll(FilterGenre $dtoFilter)
+    {
+        $this->logger->info('Filtermethode wurde für Genre aufgerufen.');
+        $qb = $this->createQueryBuilder('b');
 
         if ($dtoFilter->genre) {
-            $this->logger->debug("Filter Name: {name}", ["name" => $dtoFilter->name]);
-            $qb = $qb->andWhere("b.genre like :genre")
-                ->setParameter("genre", $dtoFilter->genre . "%");
+            $this->logger->debug('Filter Name: {name}', ['name' => $dtoFilter->name]);
+            $qb = $qb->andWhere('b.genre like :genre')
+                ->setParameter('genre', $dtoFilter->genre.'%');
         }
     }
 
