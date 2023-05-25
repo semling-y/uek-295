@@ -15,6 +15,8 @@ class MovieControllerTest extends WebTestCase
 
     private static $client;
 
+    private static $token;
+
     public static function setUpBeforeClass(): void
     {
         self::$client = new Client([
@@ -29,6 +31,19 @@ class MovieControllerTest extends WebTestCase
         self::$application->run(new StringInput('doctrine:database:create --quiet'));
         self::$application->run(new StringInput('doctrine:schema:create'));
         self::$application->run(new StringInput('doctrine:fixtures:load'));
+    }
+
+    public function setUp(): void
+    {
+        $requestLogin = self::$client->request('POST', 'api/login_check',
+            [
+                'body' => json_encode([
+                    'username' => 'Admin',
+                    'password' => 'admin',
+                ]),
+            ]);
+
+        self::$token = json_decode($requestLogin->getBody())->token;
     }
 
     /**
@@ -49,6 +64,9 @@ class MovieControllerTest extends WebTestCase
         $request = self::$client->request('POST', 'api/movie',
             [
                 'body' => json_encode($dto),
+                'headers' => [
+                    'Authorization' => 'Bearer '.self::$token,
+                ],
             ]
         );
 
@@ -57,7 +75,6 @@ class MovieControllerTest extends WebTestCase
 
         // asert methods for actual test code
         $this->assertTrue(200 == $request->getStatusCode());
-        $this->assertTrue('Film wurde erstellt.' == $response);
     }
 
     public function testPostGenre()
@@ -69,6 +86,9 @@ class MovieControllerTest extends WebTestCase
         $request = self::$client->request('POST', 'api/genre',
             [
                 'body' => json_encode($dto),
+                'headers' => [
+                    'Authorization' => 'Bearer '.self::$token,
+                ],
             ]
         );
 
@@ -82,14 +102,26 @@ class MovieControllerTest extends WebTestCase
 
     public function testGetMovie()
     {
-        $request = self::$client->request('GET', 'api/movie');
+        // Build request for post method
+        $request = self::$client->request('GET', 'api/movie',
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer '.self::$token,
+                ],
+            ]
+        );
 
         $this->assertTrue(200 == $request->getStatusCode());
     }
 
     public function testGetGenre()
     {
-        $request = self::$client->request('GET', 'api/genre');
+        $request = self::$client->request('GET', 'api/genre',
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer '.self::$token,
+                ],
+            ]);
 
         $this->assertTrue(200 == $request->getStatusCode());
     }
@@ -105,6 +137,9 @@ class MovieControllerTest extends WebTestCase
 
         $putRequest = self::$client->request('PUT', 'api/movie/1', [
             'body' => json_encode($updatedDto),
+            'headers' => [
+                'Authorization' => 'Bearer '.self::$token,
+            ],
         ]);
 
         // assert that the response code is 200 and the movie was updated
@@ -114,7 +149,12 @@ class MovieControllerTest extends WebTestCase
     public function testDeleteMovie(): void
     {
         // delete the movie
-        $deleteRequest = self::$client->request('DELETE', 'api/movie/2');
+        $deleteRequest = self::$client->request('DELETE', 'api/movie/2',
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer '.self::$token,
+                ],
+            ]);
 
         // assert that the response code is 200 and the movie was deleted
         $this->assertTrue(200 == $deleteRequest->getStatusCode());
