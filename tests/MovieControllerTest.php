@@ -33,6 +33,11 @@ class MovieControllerTest extends WebTestCase
         self::$application->run(new StringInput('doctrine:fixtures:load'));
     }
 
+    /**
+     * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * setUp function for user-token
+     */
     public function setUp(): void
     {
         $requestLogin = self::$client->request('POST', 'api/login_check',
@@ -73,7 +78,7 @@ class MovieControllerTest extends WebTestCase
         // get response for post method
         $response = json_decode($request->getBody());
 
-        // asert methods for actual test code
+        // assert methods for actual test code
         $this->assertTrue(200 == $request->getStatusCode());
     }
 

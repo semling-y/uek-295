@@ -11,9 +11,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TestDataFixture extends Fixture
 {
-
-    public function __construct(private UserPasswordHasherInterface $passwordHasher){
-
+    public function __construct(private UserPasswordHasherInterface $passwordHasher)
+    {
     }
 
     public function load(ObjectManager $manager): void

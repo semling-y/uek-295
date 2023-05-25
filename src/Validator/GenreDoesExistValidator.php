@@ -16,9 +16,11 @@ class GenreDoesExistValidator extends ConstraintValidator
     {
         $genre = $this->repository->find($idGenre);
 
+        $message = $constraint->__get("message");
+
         if (!$genre) {
             $this->context
-                ->buildViolation($constraint->message)
+                ->buildViolation($message)
                 ->setParameter('{{ genreId }}', $idGenre)
                 ->addViolation();
         }

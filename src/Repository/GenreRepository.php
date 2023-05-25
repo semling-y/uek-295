@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\DTO\FilterGenre;
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @extends ServiceEntityRepository<Genre>
@@ -19,7 +21,7 @@ class GenreRepository extends ServiceEntityRepository
     /**
      * constructor.
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private LoggerInterface $logger)
     {
         parent::__construct($registry, Genre::class);
     }
@@ -56,29 +58,4 @@ class GenreRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-//    /**
-//     * @return Genre[] Returns an array of Genre objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('g.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Genre
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
